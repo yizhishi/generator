@@ -1,0 +1,15 @@
+package ${meta.mapperPackageName};
+
+import org.apache.ibatis.annotations.Param;
+
+import ${meta.domainPackageName}.${meta.domainClassName};
+
+public interface ${meta.mapperClassName} extends BaseMapper<${meta.domainClassName}> {
+
+	/**
+	 * 查询${meta.tableDesc}单条记录
+	 */
+	${meta.domainClassName} get${meta.domainClassName}(#set($temp=0)#foreach(${col} in ${meta.cols} )#if($col.isPkFlag())#if( $temp >0 ) , #end
+@Param("${col.fieldName}") ${col.colType} ${col.fieldName}#set($temp=$temp+1)#end#end);	
+
+}

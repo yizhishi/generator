@@ -1,0 +1,34 @@
+package ${meta.domainPackageName};
+
+/**
+ * ${meta.tableDesc}
+ */
+public class ${meta.domainClassName} implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
+#foreach( ${col} in ${meta.cols} )
+
+	private ${col.colType} ${col.fieldName}; // ${col.colDesc}
+#end
+#foreach( ${col} in ${meta.cols} )
+
+	/**
+	 * set ${col.colDesc}
+	 */
+    public void ${col.seOperName}(${col.colType} ${col.fieldName}) {
+#if(${col.colType}=='String')
+		this.${col.fieldName} = ${col.fieldName} == null ? null : ${col.fieldName}.trim();
+#else
+		this.${col.fieldName} = ${col.fieldName};
+#end
+	}
+
+	/**
+	 * get ${col.colDesc}
+	 */
+	public ${col.colType} ${col.geOperName}() {
+		return this.${col.fieldName};
+	}
+#end
+
+}

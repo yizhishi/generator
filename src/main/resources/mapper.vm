@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${meta.mapperPackageName}.${meta.mapperClassName}">
+
+	<resultMap type="${meta.domainPackageName}.${meta.domainClassName}" id="${meta.domainClassName}">
+#foreach( ${col} in ${meta.cols} )
+		<result property="${col.fieldName}" column="${col.colName}" jdbcType="${col.colDBType}" />
+#end
+	</resultMap>
+
+	<select id="find" resultMap="${meta.domainClassName}" parameterType="${meta.domainPackageName}.${meta.domainClassName}">
+		select
+#foreach( ${col} in ${meta.cols} )
+#if ( $!{velocityCount} == 1 )
+			  ${col.colName} as ${col.fieldName}
+#else
+			, ${col.colName} as ${col.fieldName}
+#end
+#end
+		from ${meta.tableName}
+		<where>
+#foreach( ${col} in ${meta.cols} )
+			<if test="${col.fieldName} != null"> and ${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}</if>
+#end
+		</where>
+	</select>
+
+	<select id="count" resultType="int" parameterType="${meta.domainPackageName}.${meta.domainClassName}">
+		select
+			count(1)
+		from
+			${meta.tableName} 
+		<where>
+#foreach( ${col} in ${meta.cols} )
+			<if test="${col.fieldName} != null"> and ${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}</if>
+#end
+		</where>
+	</select>
+
+	<select id="findByMap" resultMap="${meta.domainClassName}" parameterType="map">
+		select
+#foreach( ${col} in ${meta.cols} )
+#if ( $!{velocityCount} == 1 )
+			  ${col.colName} as ${col.fieldName}
+#else
+			, ${col.colName} as ${col.fieldName}
+#end
+#end
+		from ${meta.tableName}
+		<where>
+#foreach( ${col} in ${meta.cols} )
+			<if test="_parameter.containsKey('${col.fieldName}')"> and ${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}</if>
+#end
+		</where>
+	</select>
+
+	<select id="countByMap" resultType="int" parameterType="map">
+		select
+			count(1)
+		from
+			${meta.tableName}
+		<where>
+#foreach( ${col} in ${meta.cols} )
+			<if test="_parameter.containsKey('${col.fieldName}')"> and ${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}</if>
+#end
+		</where>
+	</select>
+
+	<select id="load" resultMap="${meta.domainClassName}" parameterType="${meta.domainPackageName}.${meta.domainClassName}">
+		select
+#foreach( ${col} in ${meta.cols} )
+#if( $!{velocityCount} == 1 )
+			  ${col.colName} as ${col.fieldName}
+#else
+			, ${col.colName} as ${col.fieldName}
+#end
+#end
+		from
+			${meta.tableName}
+		<where>
+#foreach( ${col} in ${meta.cols} )
+			<if test="${col.fieldName} != null"> and ${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}</if>
+#end
+		</where>
+	</select>
+
+	<select id="loadByMap" resultMap="${meta.domainClassName}" parameterType="map">
+		select
+#foreach( ${col} in ${meta.cols} )
+#if( $!{velocityCount} == 1 )
+			  ${col.colName} as ${col.fieldName}
+#else
+			, ${col.colName} as ${col.fieldName}
+#end
+#end
+		from
+			${meta.tableName}
+		<where>
+#foreach( ${col} in ${meta.cols} )
+			<if test="_parameter.containsKey('${col.fieldName}')"> and ${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}</if>
+#end
+		</where>
+	</select>
+
+	<update id="modify" parameterType="${meta.domainPackageName}.${meta.domainClassName}">
+		update
+			${meta.tableName} 		
+		<trim prefix="set" prefixOverrides=",">
+#foreach( $col in $meta.cols )
+#if( !$col.isPkFlag() )
+			<if test="${col.fieldName} != null">, ${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}</if>
+#end
+#end
+		</trim>
+		where
+#set( $temp = 0 )
+#foreach( ${col} in ${meta.cols} )
+#if( $col.isPkFlag() )
+#if( $temp == 0 ) 
+			${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}
+#else
+		and
+			${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}
+#end
+#set( $temp = $temp + 1 )
+#end
+#end
+	</update>
+
+	<update id="modifyByMap" parameterType="map">
+		update
+			${meta.tableName}
+		<trim prefix="set" prefixOverrides=",">
+#foreach( $col in $meta.cols )
+#if( !$col.isPkFlag() )
+			<if test="_parameter.containsKey('${col.fieldName}')">, ${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}</if>
+#end
+#end
+		</trim>
+		where
+#set( $temp = 0 )
+#foreach(${col} in ${meta.cols} )
+#if( $col.isPkFlag() )
+#if( $temp == 0 )
+			${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}
+#else
+		and
+			${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}
+#end
+#set( $temp = $temp+1 )
+#end
+#end
+	</update>
+
+	<insert id="add" parameterType="${meta.domainPackageName}.${meta.domainClassName}">
+		insert
+			into
+		${meta.tableName} (
+#foreach( ${col} in ${meta.cols} )
+#if( $!{velocityCount} == 1 )
+			  ${col.colName}
+#else
+			, ${col.colName}
+#end
+#end
+		) values (
+#foreach( ${col} in ${meta.cols})
+#if( $!{velocityCount} == 1 )
+			  #{${col.fieldName}, jdbcType=${col.colDBType}}
+#else
+			, #{${col.fieldName}, jdbcType=${col.colDBType}}
+#end
+#end
+		)
+	</insert>
+
+	<insert id="addByMap" parameterType="map">
+		insert
+			into
+		${meta.tableName} (
+#foreach( ${col} in ${meta.cols} )
+#if( $!{velocityCount} == 1 )
+			  ${col.colName}
+#else
+			, ${col.colName}
+#end
+#end
+		) values (
+#foreach( ${col} in ${meta.cols} )
+#if( $!{velocityCount} == 1 )
+			  #{${col.fieldName}, jdbcType=${col.colDBType}}
+#else
+			, #{${col.fieldName}, jdbcType=${col.colDBType}}
+#end
+#end
+		)
+	</insert>
+
+	<select id="get${meta.domainClassName}" resultMap="${meta.domainClassName}">
+		select
+#foreach( ${col} in ${meta.cols} )
+#if( $!{velocityCount} == 1 )
+			  ${col.colName} as ${col.fieldName}
+#else
+			, ${col.colName} as ${col.fieldName}
+#end
+#end
+		from
+			${meta.tableName}
+		where
+#set( $temp = 0 )
+#foreach( ${col} in ${meta.cols} )
+#if( $col.isPkFlag() )
+#if( $temp == 0 )
+			${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}
+#else 
+		and
+			${col.colName} = #{${col.fieldName}, jdbcType=${col.colDBType}}
+#end
+#set( $temp = $temp + 1 )
+#end
+#end
+	</select>
+
+</mapper>
