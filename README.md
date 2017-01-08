@@ -1,0 +1,3 @@
+# generator
+这是一个基于velocity模板的数据库反向工程，可以生成对应的表实体及单表增删改查。
+依赖的apache的commons-lang和velocity，以及对应的数据库driver包。
