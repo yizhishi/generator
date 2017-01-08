@@ -1,4 +1,3 @@
-package gen;
 // package ${meta.mapperPackageName};
 //
 // import java.util.List;

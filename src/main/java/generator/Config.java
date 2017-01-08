@@ -21,7 +21,6 @@ public class Config {
 		if (properties == null) {
 			InputStream in;
 			try {
-				// 打包后，
 				File file = new File(System.getProperty("user.dir") + File.separator + PROPERTIES_NAME);
 				if (!file.exists()) {
 					in = Config.class.getClassLoader().getResourceAsStream(PROPERTIES_NAME);
