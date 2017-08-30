@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+	<context id="kwan" defaultModelType="flat" targetRuntime="MyBatis3">
+
+		<property name="autoDelimitKeywords" value="true" />
+		<property name="javaFileEncoding" value="UTF-8" />
+		<property name="beginningDelimiter" value="`" />
+		<property name="endingDelimiter" value="`" />
+
+		<!-- 序列化插件 -->
+		<plugin type="generator.mybatis.SerializablePlugin" />
+
+		<!-- 注释生成 -->
+		<commentGenerator type="generator.mybatis.MyCommentGenerator">
+		</commentGenerator>
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://ip:port/schema" userId="login_name"
+			password="password"></jdbcConnection>
+
+		<javaModelGenerator targetPackage="com.kwan.model"
+			targetProject="C:\generator">
+
+			<!-- 是否对model添加 构造函数 -->
+			<property name="constructorBased" value="false" />
+
+			<!-- 是否允许子包，即targetPackage.schemaName.tableName -->
+			<property name="enableSubPackages" value="false" />
+
+			<!-- 建立的Model对象是否 不可改变 即生成的Model对象不会有 setter方法，只有构造方法 -->
+			<property name="immutable" value="false" />
+
+			<!-- 是否对类CHAR类型的列的数据进行trim操作 -->
+			<property name="trimStrings" value="true" />
+
+			<!-- 给Model添加一个父类 -->
+			<property name="rootClass" value="com.kwan.model.base.BaseModel" />
+
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="com.kwan.mapper"
+			targetProject="C:\generator" />
+
+		<javaClientGenerator targetPackage="com.kwan.mapper"
+			targetProject="C:\generator" type="XMLMAPPER" />
+
+		<table schema="schema" tableName="table_name" domainObjectName="TableName"></table>
+
+	</context>
+
+</generatorConfiguration>
