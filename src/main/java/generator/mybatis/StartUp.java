@@ -11,21 +11,20 @@ import org.mybatis.generator.internal.DefaultShellCallback;
 
 public class StartUp {
 
-	public static void main(String[] args) {
-		try {
-			List<String> warnings = new ArrayList<>();
-			boolean overwrite = true;
-			InputStream is =
-					StartUp.class.getClassLoader().getResourceAsStream("generatorConfig.xml");
+  public static void main(String[] args) {
+    try {
+      List<String> warnings = new ArrayList<>();
+      boolean overwrite = true;
+      InputStream is = StartUp.class.getClassLoader().getResourceAsStream("generatorConfig.xml");
 
-			ConfigurationParser cp = new ConfigurationParser(warnings);
-			Configuration config = cp.parseConfiguration(is);
-			DefaultShellCallback callback = new DefaultShellCallback(overwrite);
-			MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
-			myBatisGenerator.generate(null);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+      ConfigurationParser cp = new ConfigurationParser(warnings);
+      Configuration config = cp.parseConfiguration(is);
+      DefaultShellCallback callback = new DefaultShellCallback(overwrite);
+      MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
+      myBatisGenerator.generate(null);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
 }
